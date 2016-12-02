@@ -1,5 +1,4 @@
 """Day 1 of Advent of Code."""
-import unittest
 
 
 GIVEN_INPUT = [
@@ -18,30 +17,6 @@ GIVEN_INPUT = [
     'R4', 'R3', 'R5', 'L4', 'L4', 'L5', 'L5', 'R3', 'R4', 'L1', 'L3', 'R2',
     'L2', 'R1', 'L3', 'L5', 'R5', 'R5', 'R3', 'L4', 'L2', 'R4', 'R5', 'R1',
     'R4', 'L3']
-
-
-class TestDay1(unittest.TestCase):
-    """This is the unit tests for Day 1.
-    """
-    def setUp(self):
-        self.test_1 = ['R2', 'L3']
-        self.test_2 = ['R2', 'R2', 'R2']
-        self.test_3 = ['R5', 'L5', 'R5', 'R3']
-        self.test_4 = ['R8', 'R4', 'R4', 'R8']
-
-    def test_longest_block_distances(self):
-        """Tests to make sure the longest block distance function works.
-        """
-        self.assertEqual(longest_block_distance(self.test_1), 5)
-        self.assertEqual(longest_block_distance(self.test_2), 2)
-        self.assertEqual(longest_block_distance(self.test_3), 12)
-        self.assertEqual(longest_block_distance(self.test_4[:2]), 12)
-        self.assertEqual(longest_block_distance(self.test_4), 8)
-
-    def test_distance_to_first_repeated_block(self):
-        """Tests to make sure the longest block distance function works.
-        """
-        self.assertEqual(distance_to_first_repeated_block(self.test_4), 4)
 
 
 def longest_block_distance(directions):
@@ -144,6 +119,8 @@ def distance_to_first_repeated_block(directions):
 
         index += 1
 
+    return -1
+
 
 if __name__ == '__main__':
     print('Given directions: {}'.format(GIVEN_INPUT))
@@ -153,4 +130,3 @@ if __name__ == '__main__':
     print(
         'Distance to first repeated block with given directions: {}'.format(
             distance_to_first_repeated_block(GIVEN_INPUT)))
-    # unittest.main()
