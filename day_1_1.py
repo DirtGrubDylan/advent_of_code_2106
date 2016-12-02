@@ -34,7 +34,8 @@ def interpret_directions(directions):
     ew_parity = 1
     direction_parity_table = {'R': 1, 'L': -1}
 
-    block_distance = 0
+    ns_distance = 0
+    ew_distance = 0
 
     for direction in directions:
         direction_parity = direction_parity_table[direction[0]]
@@ -45,23 +46,24 @@ def interpret_directions(directions):
             else: #facing south
                 ew_parity = -direction_parity
 
-            block_distance += ew_parity * int(direction[1:])
+            ew_distance += ew_parity * int(direction[1:])
         else: #heading ns
             if ew_parity == 1: #facing east
                 ns_parity = -direction_parity
             else: #facing west
                 ns_parity = direction_parity
 
-            block_distance += ns_parity * int(direction[1:])
+            ns_distance += ns_parity * int(direction[1:])
 
         index += 1
 
-    return abs(block_distance)
+    return abs(ns_distance) + abs(ew_distance)
 
 
 def main():
     """Main of the file.
     """
+    print(interpret_directions(['R8', 'R4']))
     print(interpret_directions(TEST_DIRECTIONS_1))
     print(interpret_directions(TEST_DIRECTIONS_2))
     print(interpret_directions(TEST_DIRECTIONS_3))
