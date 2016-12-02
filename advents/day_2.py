@@ -65,7 +65,9 @@ def main():
 
     instructions = instructions_from_file(input_file)
 
-    print(code_from_instructions(instructions))
+    print(
+        'Code from the instructions: {}'.format(
+            code_from_instructions(instructions)))
 
 if __name__ == '__main__':
     main()
