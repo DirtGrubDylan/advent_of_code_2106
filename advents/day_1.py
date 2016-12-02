@@ -122,7 +122,9 @@ def distance_to_first_repeated_block(directions):
     return -1
 
 
-if __name__ == '__main__':
+def main():
+    """Main of module.
+    """
     print('Given directions: {}'.format(GIVEN_INPUT))
     print(
         'Longest distance with given directions: {}'.format(
@@ -130,3 +132,6 @@ if __name__ == '__main__':
     print(
         'Distance to first repeated block with given directions: {}'.format(
             distance_to_first_repeated_block(GIVEN_INPUT)))
+
+if __name__ == '__main__':
+    main()
