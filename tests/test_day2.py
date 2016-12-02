@@ -26,8 +26,16 @@ class TestDay2(unittest.TestCase):
     def test_code_from_instuctions(self):
         """Test the code_from_instructions function in the day_2 module.
         """
+        test_keypad_1 = [
+            ['1', '2', '3'],
+            ['4', '5', '6'],
+            ['7', '8', '9']]
+        starting_location = [1, 1]
+
         self.assertEqual(
-            code_from_instructions(self.test_input_1), '1985')
+            code_from_instructions(
+                self.test_input_1, test_keypad_1, starting_location),
+            '1985')
 
     def test_instructions_from_file(self):
         """Test the instructions_from_file function in the day_2 module.
