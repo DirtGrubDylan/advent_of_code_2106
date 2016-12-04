@@ -107,9 +107,8 @@ def instructions_from_file(file_path):
 def main():
     """Main of module.
     """
-    input_file = (
-        os.path.join(
-            os.path.join(os.path.dirname(__file__), 'data'), 'day2_input.txt'))
+    input_file = os.path.join(
+        os.path.join(os.path.dirname(__file__), 'data'), 'day2_input.txt')
 
     instructions = instructions_from_file(input_file)
 
