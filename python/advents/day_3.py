@@ -66,7 +66,9 @@ def main():
     """
     file_name = os.path.join(
         os.path.join(os.path.dirname(__file__), 'data'), 'day3_input.txt')
-    print(num_of_valid_triangles(triangles_from_file(file_name)))
+    print(
+        'Number of valid triangles: {}'.format(
+            num_of_valid_triangles(triangles_from_file(file_name))))
 
 
 if __name__ == '__main__':
