@@ -103,11 +103,11 @@ def main():
         os.path.join(os.path.dirname(__file__), 'data'), 'day3_input.txt')
 
     print(
-        'Number of valid triangles: {}'.format(
+        'Number of valid triangles row major: {}'.format(
             num_of_valid_triangles(triangles_rows_from_file(file_name))))
 
     print(
-        'Number of valid triangles: {}'.format(
+        'Number of valid triangles column major: {}'.format(
             num_of_valid_triangles(triangles_cols_from_file(file_name))))
 
 
