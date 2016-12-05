@@ -1,4 +1,5 @@
-"""This is a dummy test."""
+"""This is a test for day 3."""
+
 import os
 import sys
 import unittest
@@ -15,7 +16,7 @@ class TestDay3(unittest.TestCase):
     """Testing day 3 module.
     """
     def setUp(self):
-        self.test_input_1 = (5, 10, 25)
+        self.test_input_1 = [5, 10, 25]
         self.test_file_name_1 = os.path.join(
             os.path.join(os.path.dirname(__file__), 'test_data'),
             'test_day3_data.txt')
@@ -33,8 +34,8 @@ class TestDay3(unittest.TestCase):
             N/A
         """
         expected_answer = [
-            (775, 785, 361), (622, 375, 125), (297, 839, 375), (245, 38, 891),
-            (503, 463, 849), (731, 482, 759)]
+            [775, 785, 361], [622, 375, 125], [297, 839, 375], [245, 38, 891],
+            [503, 463, 849], [731, 482, 759]]
 
         self.assertEqual(
             triangles_rows_from_file(self.test_file_name_1),

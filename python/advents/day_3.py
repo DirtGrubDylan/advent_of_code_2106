@@ -47,7 +47,7 @@ def triangles_rows_from_file(file_path):
         file_path (str): The file name, including the path, to the data file.
 
     Returns:
-        (list): A list of tuples, which are sides to triangles.
+        (list): A list of lists, which are sides to triangles.
     """
     list_of_triangle_sides = []
 
@@ -56,19 +56,19 @@ def triangles_rows_from_file(file_path):
             stripped_line = line.rstrip('\r\n').split(' ')
 
             list_of_triangle_sides.append(
-                tuple([int(num) for num in stripped_line if num != '']))
+                [int(num) for num in stripped_line if num != ''])
 
     return list_of_triangle_sides
 
 
 def triangles_cols_from_file(file_path):
-    """Returns an array of triangles from file, which is row major.
+    """Returns an array of triangles from file, which is column major.
 
     Args:
         file_path (str): The file name, including the path, to the data file.
 
     Returns:
-        (list): A list of tuples, which are sides to triangles.
+        (list): A list of lists, which are sides to triangles.
     """
     list_of_triangle_sides = []
 
