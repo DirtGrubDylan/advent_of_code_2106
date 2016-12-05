@@ -1,6 +1,7 @@
 """This is Day 5 of Advent of Code."""
 
 import hashlib
+from datetime import datetime
 
 
 class Door(object):
@@ -58,9 +59,16 @@ class Door(object):
 def main():
     """Day 5 module main.
     """
-    door = Door('wtnhxymk')
+    door_id = 'wtnhxymk'
+    door = Door(door_id)
+
+    start_time = datetime.now()
 
     print('The door code is: {}'.format(door.code_from_id()))
+
+    print(
+        'Time to decode door_id [{}]: {}s'.format(
+            door_id, (datetime.now() - start_time).total_seconds()))
 
 if __name__ == '__main__':
     main()
