@@ -16,7 +16,8 @@ fn main() {
     println!("Answer 1: {}", longest_distance);
 }
 
-fn data_from_file(file_name: &PathBuf) -> Result<Vec<String>, std::io::Error> {
+pub fn data_from_file(file_name: &PathBuf) -> 
+        Result<Vec<String>, std::io::Error> {
     let mut data_file: File = File::open(file_name)?;
     let mut data_line: String = String::new();
 
@@ -30,7 +31,7 @@ fn data_from_file(file_name: &PathBuf) -> Result<Vec<String>, std::io::Error> {
     Ok(data)
 }
 
-fn longest_block_distance(directions: &Vec<String>) -> i32 {
+pub fn longest_block_distance(directions: &Vec<String>) -> i32 {
     let mut index: i32 = 0;
     let mut ew_parity: i32 = 1;
     let mut ns_parity: i32 = 1;
@@ -68,4 +69,15 @@ fn longest_block_distance(directions: &Vec<String>) -> i32 {
     }
 
     return travel_location.iter().sum();
+}
+
+// Testing
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_longest_distance() {
+        assert_eq!(longest_block_distance(&vec!["R2", "L3"]), 5);
+    }
 }
