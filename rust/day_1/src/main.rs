@@ -1,6 +1,7 @@
 use std::env;
 use std::io::Read;
 use std::fs::File;
+use std::path::Path;
 use std::path::PathBuf;
 use std::collections::HashMap;
 use std::collections::HashSet;
@@ -12,17 +13,17 @@ fn main() {
 
     let directions: Vec<String> = data_from_file(&data_path).unwrap();
 
-    let longest_distance: i32 = longest_block_distance(&directions);
+    let longest_distance: i32 = longest_block_distance(&directions).unwrap();
 
-    let distance_to_reoccurance: i32 = 
-        first_reoccuring_block_distance(&directions);
+    let distance_to_reoccurance: i32 =
+        first_reoccuring_block_distance(&directions).unwrap();
 
     println!("Answer 1: {}", longest_distance);
     println!("Answer 2: {}", distance_to_reoccurance);
 }
 
-pub fn data_from_file(file_name: &PathBuf) -> 
-        Result<Vec<String>, std::io::Error> {
+pub fn data_from_file<P>(file_name: &P) -> Result<Vec<String>, std::io::Error>
+        where P: AsRef<Path> {
     let mut data_file: File = File::open(file_name)?;
     let mut data_line: String = String::new();
 
@@ -36,7 +37,7 @@ pub fn data_from_file(file_name: &PathBuf) ->
     Ok(data)
 }
 
-pub fn longest_block_distance(directions: &Vec<String>) -> i32 {
+pub fn longest_block_distance(directions: &Vec<String>) -> Result<i32, String> {
     let mut index: i32 = 0;
     let mut ew_parity: i32 = 1;
     let mut ns_parity: i32 = 1;
@@ -44,13 +45,19 @@ pub fn longest_block_distance(directions: &Vec<String>) -> i32 {
     let mut direction_parity_table: HashMap<char, i32> = HashMap::new();
     direction_parity_table.insert('R', 1);
     direction_parity_table.insert('L', -1);
-    
+
     let mut travel_location: [i32; 2] = [0, 0];
 
     for direction in directions {
-        let direction_parity: &i32 = direction_parity_table.get(
-            &(direction.chars().nth(0).unwrap())).unwrap();
-        let distance: i32 = (&direction[1..]).parse().unwrap();
+        let direction_char: char =
+            direction
+                .chars().nth(0).ok_or("Direction is empty!".to_owned())?;
+        let direction_parity: &i32 =
+            direction_parity_table
+                .get(&direction_char)
+                .ok_or("Direction not in parity table!".to_owned())?;
+        let distance: i32 =
+            (&direction[1..]).parse::<i32>().map_err(|e| e.to_string())?;
 
         if index % 2 == 0 {
             if ns_parity == 1 {
@@ -66,17 +73,18 @@ pub fn longest_block_distance(directions: &Vec<String>) -> i32 {
             } else {
                 ns_parity = *direction_parity;
             }
-            
+
             travel_location[0] += ns_parity * distance;
        }
 
         index += 1;
     }
 
-    travel_location[0].abs() + travel_location[1].abs()
+    Ok(travel_location[0].abs() + travel_location[1].abs())
 }
 
-pub fn first_reoccuring_block_distance(directions: &Vec<String>) -> i32 {
+pub fn first_reoccuring_block_distance(directions: &Vec<String>)
+         -> Result<i32, String> {
     let mut index: i32 = 0;
     let mut ew_parity: i32 = 1;
     let mut ns_parity: i32 = 1;
@@ -84,16 +92,22 @@ pub fn first_reoccuring_block_distance(directions: &Vec<String>) -> i32 {
     let mut direction_parity_table: HashMap<char, i32> = HashMap::new();
     direction_parity_table.insert('R', 1);
     direction_parity_table.insert('L', -1);
-    
+
     let mut travel_location: [i32; 2] = [0, 0];
 
     let mut locations_visited: HashSet<[i32; 2]> = HashSet::new();
     locations_visited.insert(travel_location);
 
     for direction in directions {
-        let direction_parity: &i32 = direction_parity_table.get(
-            &(direction.chars().nth(0).unwrap())).unwrap();
-        let distance: i32 = (&direction[1..]).parse().unwrap();
+        let direction_char: char =
+            direction
+                .chars().nth(0).ok_or("Direction is empty!".to_owned())?;
+        let direction_parity: &i32 =
+            direction_parity_table
+                .get(&direction_char)
+                .ok_or("Direction not in parity table!".to_owned())?;
+        let distance: i32 =
+            (&direction[1..]).parse::<i32>().map_err(|e| e.to_string())?;
 
         if index % 2 == 0 {
             if ns_parity == 1 {
@@ -115,7 +129,7 @@ pub fn first_reoccuring_block_distance(directions: &Vec<String>) -> i32 {
                     [travel_location[0], travel_from];
 
                 if locations_visited.contains(&temp_location) {
-                    return temp_location[0].abs() + temp_location[1].abs();
+                    return Ok(temp_location[0].abs() + temp_location[1].abs());
                 }
 
                 locations_visited.insert(temp_location);
@@ -126,7 +140,7 @@ pub fn first_reoccuring_block_distance(directions: &Vec<String>) -> i32 {
             } else {
                 ns_parity = *direction_parity;
             }
-            
+
             let mut travel_from: i32 = travel_location[0];
 
             travel_location[0] += ns_parity * distance;
@@ -140,7 +154,7 @@ pub fn first_reoccuring_block_distance(directions: &Vec<String>) -> i32 {
                     [travel_from, travel_location[1]];
 
                 if locations_visited.contains(&temp_location) {
-                    return temp_location[0].abs() + temp_location[1].abs();
+                    return Ok(temp_location[0].abs() + temp_location[1].abs());
                 }
 
                 locations_visited.insert(temp_location);
@@ -150,7 +164,7 @@ pub fn first_reoccuring_block_distance(directions: &Vec<String>) -> i32 {
         index += 1;
     }
 
-    return -1; 
+    Err("There is no intersection!".to_owned())
 }
 
 // Testing
@@ -183,33 +197,36 @@ mod tests {
         data_path.push("data");
         data_path.push("input.txt");
 
-        assert_eq!(data_from_file(&data_path).unwrap(), data_vec);        
+        assert_eq!(data_from_file(&data_path).unwrap(), data_vec);
     }
 
     #[test]
     fn test_longest_distance() {
         assert_eq!(
             longest_block_distance(
-                &(vec!["R2".to_owned(), "L3".to_owned()])), 5);
+                &(vec!["R2".to_owned(), "L3".to_owned()])).unwrap(), 5);
 
         assert_eq!(
             longest_block_distance(
-                &(vec!["R2".to_owned(), "R2".to_owned(), "R2".to_owned()])), 2);
+                &(vec!["R2".to_owned(), "R2".to_owned(), "R2".to_owned()]))
+                .unwrap(),
+            2);
 
         assert_eq!(
             longest_block_distance(
                 &(vec![
                     "R5".to_owned(), "L5".to_owned(), "R5".to_owned(),
-                    "R3".to_owned()])),
+                    "R3".to_owned()]))
+                .unwrap(),
             12);
     }
 
     #[test]
     fn test_first_reoccuring_block_distance() {
-        let test_vec: Vec<String> =  
+        let test_vec: Vec<String> =
             vec!["R8".to_owned(), "R4".to_owned(), "R4".to_owned(),
                  "R8".to_owned()];
 
-        assert_eq!(first_reoccuring_block_distance(&test_vec), 4);
+        assert_eq!(first_reoccuring_block_distance(&test_vec).unwrap(), 4);
     }
 }
