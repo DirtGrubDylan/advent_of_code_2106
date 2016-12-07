@@ -55,13 +55,13 @@ class TestDay7(unittest.TestCase):
         test_ipv7 = IPv7(self.test_long_addr)
         answer = ['[arktzcssgkxktejbno]', '[zblrboqsvezcgfmfvcz]']
 
-        self.assertEqual(test_ipv7._hyper_net_sequences, answer)
+        self.assertEqual(test_ipv7.hyper_net_from_address(), answer)
 
     def test_non_hyper_net_from_address(self):
         test_ipv7 = IPv7(self.test_long_addr)
         answer = ['itgslvpxoqqakli', 'wsgkbwwtbmfnddt', 'iwyhyatqetsreeyhh']
 
-        self.assertEqual(test_ipv7._non_hyper_net_sequences, answer)
+        self.assertEqual(test_ipv7.non_hyper_net_from_address(), answer)
 
 
 if __name__ == "__main__":
