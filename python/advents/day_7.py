@@ -5,24 +5,22 @@ class IPv7(object):
     def __init__(self, address):
         super().__init__()
 
-        self.address = address
-        self.hyper_net_sequences = self.hyper_net_from_address()
-        self.non_hyper_net_sequences = self.non_hyper_net_from_address()
+        self._address = address
+        self._hyper_net_sequences = self.hyper_net_from_address()
+        self._non_hyper_net_sequences = self.non_hyper_net_from_address()
 
     def hyper_net_from_address(self):
-        hyper_nets = re.findall('\[\w+\]', self.address)
-
-        return [hyper_net[1:-1] for hyper_net in hyper_nets]
+        return re.findall('\[\w+\]', self._address)
 
     def non_hyper_net_from_address(self):
-        return re.split('\[\w+\]', self.address)
+        return re.split('\[\w+\]', self._address)
 
     def supports_tls(self):
-        for hyper_net in self.hyper_net_sequences:
+        for hyper_net in self._hyper_net_sequences:
             if self.contains_tls_pair(hyper_net):
                 return False
 
-        for non_hyper_net in self.non_hyper_net_sequences:
+        for non_hyper_net in self._non_hyper_net_sequences:
             if self.contains_tls_pair(non_hyper_net):
                 return True
 
