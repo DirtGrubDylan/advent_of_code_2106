@@ -36,6 +36,38 @@ pub fn read_row_major_triangles_from_file<P>(file_name: &P)
     Ok(data)
 }
 
+pub fn read_column_major_triangles_from_file<P>(file_name: &P)
+        -> Result<Vec<Triangle>, String> where P: AsRef<Path> {
+    let mut data: Vec<Triangle> = Vec::new();
+    let mut triangle_sides: Vec<i32> = Vec::new();
+    let data_file: File = File::open(file_name).map_err(|e| e.to_string())?;
+
+    for line in io::BufReader::new(data_file).lines() {
+        let temp_sides: String = line.map_err(|e| e.to_string())?;
+
+        let temp_sides: Vec<i32> =
+            temp_sides.split_whitespace().collect::<Vec<&str>>().iter()
+                      .map(|&s| s.parse::<i32>().unwrap()).collect();
+
+        for triangle_side in temp_sides {
+            triangle_sides.push(triangle_side);
+        }
+
+        if triangle_sides.len() == 9 {
+            for index in 0..3 {
+                data.push(
+                    Triangle(
+                        triangle_sides[index], triangle_sides[index + 3],
+                        triangle_sides[index + 6]))
+            }
+
+            triangle_sides.clear();
+        }
+    }
+
+    Ok(data)
+}
+
 pub fn number_of_valid_row_major_triangles_in_file<P>(file_name: &P)
         -> Result<u32, String> where P: AsRef<Path> {
     let triangles: Vec<Triangle> =
@@ -51,6 +83,20 @@ pub fn number_of_valid_row_major_triangles_in_file<P>(file_name: &P)
     Ok(number_valid)
 }
 
+pub fn number_of_valid_column_major_triangles_in_file<P>(file_name: &P)
+        -> Result<u32, String> where P: AsRef<Path> {
+    let triangles: Vec<Triangle> =
+        read_column_major_triangles_from_file(file_name)?;
+    let mut number_valid: u32 = 0;
+
+    for triangle in triangles {
+        if triangle.is_valid() {
+            number_valid += 1;
+        }
+    }
+
+    Ok(number_valid)
+}
 
 #[cfg(test)]
 mod tests {
@@ -60,7 +106,7 @@ mod tests {
     use std::path::PathBuf;
 
     #[test]
-    fn test_load_triangles() {
+    fn test_load_row_major_triangles() {
         let mut data_path: PathBuf = env::current_dir().unwrap();
         data_path.push("data");
         data_path.push("input.txt");
@@ -71,6 +117,20 @@ mod tests {
         let answer:Triangle = Triangle(775, 785, 361);
 
         assert_eq!(data[0], answer);
+    }
+
+    #[test]
+    fn test_load_column_major_triangles() {
+        let mut data_path: PathBuf = env::current_dir().unwrap();
+        data_path.push("data");
+        data_path.push("input.txt");
+
+        let data: Vec<Triangle> =
+            read_column_major_triangles_from_file(&data_path).unwrap();
+
+        let answer:Triangle = Triangle(38, 463, 482);
+
+        assert_eq!(data[4], answer);
     }
 
     #[test]

@@ -12,4 +12,10 @@ fn main() {
         day_3::number_of_valid_row_major_triangles_in_file(&data_path).unwrap();
 
     println!("Answer 1: {}", number_of_valid_row_major_triangles_in_file);
+
+    let number_of_valid_column_major_triangles_in_file: u32 =
+        day_3::number_of_valid_column_major_triangles_in_file(
+            &data_path).unwrap();
+
+    println!("Answer 1: {}", number_of_valid_column_major_triangles_in_file);
 }
