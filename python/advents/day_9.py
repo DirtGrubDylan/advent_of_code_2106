@@ -39,9 +39,9 @@ class ExperimentalSequence(object):
         return decoded_sum
 
     def decode_v2(self):
-        return self.rec_marker_interp(self.sequence, 1)
+        return self.rec_marker_interp(self.sequence)
 
-    def rec_marker_interp(self, substr, multiplier):
+    def rec_marker_interp(self, substr):
         decoded_sum = 0
 
         starting_index = 0
@@ -58,7 +58,7 @@ class ExperimentalSequence(object):
 
             s_substr = substr[marker_end_index : starting_index]
 
-            decoded_sum += self.rec_marker_interp(s_substr, marker[1])
+            decoded_sum += self.rec_marker_interp(s_substr) * marker[1]
 
             substr = substr[starting_index:]
 
@@ -67,7 +67,7 @@ class ExperimentalSequence(object):
 
         decoded_sum += len(substr)
 
-        return multiplier * decoded_sum
+        return decoded_sum
 
     @staticmethod
     def decode_re_mark_search(re_mark_search):
