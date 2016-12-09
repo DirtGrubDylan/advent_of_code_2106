@@ -21,7 +21,7 @@ class ExperimentalSequence(object):
             marker, marker_start_index, marker_end_index = (
                 self.decode_re_mark_search(mark_search))
 
-            decoded_sum += len(substr[starting_index : marker_start_index])
+            decoded_sum += len(substr[:marker_start_index])
 
             starting_index = (marker_end_index) + marker[0]
 
