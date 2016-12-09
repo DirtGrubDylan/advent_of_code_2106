@@ -9,7 +9,7 @@ class ExperimentalSequence(object):
         self.original_sequence = sequence
 
     def decode(self):
-        decoded_sequence = list()
+        decoded_sum = 0
 
         starting_index = 0
 
@@ -21,46 +21,53 @@ class ExperimentalSequence(object):
             marker, marker_start_index, marker_end_index = (
                 self.decode_re_mark_search(mark_search))
 
-            decoded_sequence.append(
-                len(substr[starting_index : marker_start_index]))
+            decoded_sum += len(substr[starting_index : marker_start_index])
 
             starting_index = (marker_end_index) + marker[0]
 
             s_substr = substr[marker_end_index : starting_index]
 
-            decoded_sequence.append(marker[1] * len(s_substr))
+            decoded_sum += marker[1] * len(s_substr)
 
             substr = substr[starting_index:]
 
             mark_search = re.search('\(\d+x\d+\)', substr)
 
 
-        decoded_sequence.append(len(substr))
+        decoded_sum += len(substr)
 
-        return sum(decoded_sequence)
+        return decoded_sum
 
     def decode_v2(self):
-        # decoded_sequence = list()
-
         return self.rec_marker_interp(self.sequence, 1)
 
-    @staticmethod
-    def rec_marker_interp(substr, multiplier):
-        decoded_sequence = list()
+    def rec_marker_interp(self, substr, multiplier):
+        decoded_sum = 0
 
         starting_index = 0
 
-        while marker is not None:
-            decoded_sequence.append(
-                len(self.sequence[starting_index : marker_start_index]))
-            starting_index = (marker_end_index + 1) + marker[0]
-            decoded_sequence.append(
-                marker[1] *
-                len(self.sequence[marker_end_index + 1 : starting_index]))
+        mark_search = re.search('\(\d+x\d+\)', substr)
 
-        decoded_sequence.append(len(self.sequence[starting_index:]))
+        while mark_search is not None:
+            marker, marker_start_index, marker_end_index = (
+                self.decode_re_mark_search(mark_search))
 
-        return sum(decoded_sequence)
+            decoded_sum += len(substr[:marker_start_index])
+
+            starting_index = (marker_end_index) + marker[0]
+
+            s_substr = substr[marker_end_index : starting_index]
+
+            decoded_sum += self.rec_marker_interp(s_substr, marker[1])
+
+            substr = substr[starting_index:]
+
+            mark_search = re.search('\(\d+x\d+\)', substr)
+
+
+        decoded_sum += len(substr)
+
+        return multiplier * decoded_sum
 
     @staticmethod
     def decode_re_mark_search(re_mark_search):
@@ -90,7 +97,7 @@ def main():
         ExperimentalSequence.experimental_sequences_from_file(data_file)[0])
 
     print('Answer 1: {}'.format(given_sequence.decode()))
-    # print('Answer 2: {}'.format(len(given_sequence.decode_v2())))
+    print('Answer 2: {}'.format(given_sequence.decode_v2()))
 
 if __name__ == '__main__':
     main()

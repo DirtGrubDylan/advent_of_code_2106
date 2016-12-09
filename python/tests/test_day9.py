@@ -40,14 +40,11 @@ class TestDummy(unittest.TestCase):
     #     self.assertEqual(self.test_sequence[1].decode(), 'ABBBBBC')
         self.assertEqual(self.test_sequence[5].decode(), 18)
 
-    # def test_decode_v2(self):
-    #     self.assertEqual(self.test_sequence[0].decode_v2(), 'ADVENT')
-    #     self.assertEqual(self.test_sequence[1].decode_v2(), 'ABBBBBC')
-    #     self.assertEqual(
-    #         self.test_sequence[5].decode_v2(), 'XABCABCABCABCABCABCY')
-
-    #     self.assertEqual(len(self.test_sequence[6].decode_v2()), 241920)
-    #     self.assertEqual(len(self.test_sequence[7].decode_v2()), 445)
+    def test_decode_v2(self):
+        self.assertEqual(
+            self.test_sequence[5].decode_v2(), len('XABCABCABCABCABCABCY'))
+        self.assertEqual(self.test_sequence[6].decode_v2(), 241920)
+        self.assertEqual(self.test_sequence[7].decode_v2(), 445)
 
 if __name__ == "__main__":
     unittest.main()
