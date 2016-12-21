@@ -66,6 +66,8 @@ class TestDummy(unittest.TestCase):
         self.assertEqual(self.test_warehouse.bots['1'].values, [])
         self.assertEqual(self.test_warehouse.bots['2'].values, [5, 2])
 
+        self.assertEqual(self.test_warehouse.output_bins['1'], [3])
+
     def test_execute_2(self):
         self.test_warehouse.bots['2'].values.append(5)
         self.test_warehouse.bots['2'].values.append(2)
@@ -77,12 +79,21 @@ class TestDummy(unittest.TestCase):
         self.assertEqual(self.test_warehouse.bots['1'].values, [])
         self.assertEqual(self.test_warehouse.bots['2'].values, [])
 
+        self.assertEqual(self.test_warehouse.output_bins['0'], [5])
+        self.assertEqual(self.test_warehouse.output_bins['1'], [2])
+        self.assertEqual(self.test_warehouse.output_bins['2'], [3])
+
     def test_run_bots(self):
         self.test_warehouse.run_bots()
 
         self.assertEqual(self.test_warehouse.bots['0'].values, [])
         self.assertEqual(self.test_warehouse.bots['1'].values, [])
         self.assertEqual(self.test_warehouse.bots['2'].values, [])
+
+        self.assertEqual(self.test_warehouse.output_bins['0'], [5])
+        self.assertEqual(self.test_warehouse.output_bins['1'], [2])
+        self.assertEqual(self.test_warehouse.output_bins['2'], [3])
+
         self.assertEqual(self.test_warehouse.desired_bot_id, '2')
 
 

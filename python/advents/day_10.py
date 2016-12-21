@@ -1,4 +1,5 @@
 import re
+import os
 from collections import deque
 
 BOT_SEARCH = re.compile('bot\s(\d+)')
@@ -12,8 +13,8 @@ class Warehouse(object):
         super().__init__()
 
         self.bots = {}
-        self.number_1 = number_1
-        self.number_2 = number_2
+        self.output_bins = {}
+        self.number_1, self.number_2 = sorted([number_1, number_2])
         self.from_input_instructions = []
         self.desired_bot_id = None
 
@@ -61,8 +62,13 @@ class Warehouse(object):
 
             if low_bot.is_full():
                 self.execute(low_destination[1])
-        else:
-            current_bot.output_low_value()
+        elif low_destination[0] == 'output':
+            if low_destination[1] not in self.output_bins:
+                self.output_bins[low_destination[1]] = []
+
+            low_output_bin = self.output_bins[low_destination[1]]
+
+            current_bot.output_low_value_to(low_output_bin)
 
         if high_destination[0] == 'bot':
             high_bot = self.bots[high_destination[1]]
@@ -70,8 +76,13 @@ class Warehouse(object):
 
             if high_bot.is_full():
                 self.execute(high_destination[1])
-        else:
-            current_bot.output_high_value()
+        elif high_destination[0] == 'output':
+            if high_destination[1] not in self.output_bins:
+                self.output_bins[high_destination[1]] = []
+
+            high_output_bin = self.output_bins[high_destination[1]]
+
+            current_bot.output_high_value_to(high_output_bin)
 
 
 class Bot(object):
@@ -87,7 +98,7 @@ class Bot(object):
         return len(self.values) == 2
 
     def contains(self, number_1, number_2):
-        return sorted(self.values) == sorted([number_1, number_2])
+        return sorted(self.values) == [number_1, number_2]
 
     def next_instruction(self):
         instruction = self.instructions.popleft()
@@ -113,22 +124,36 @@ class Bot(object):
         except ValueError:
             pass
 
-    def output_low_value(self):
+    def output_low_value_to(self, output_bin):
         try:
             low_value = min(self.values)
+            output_bin.append(low_value)
             self.values.remove(low_value)
         except ValueError:
             pass
 
-    def output_high_value(self):
+    def output_high_value_to(self, output_bin):
         try:
             high_value = min(self.values)
+            output_bin.append(high_value)
             self.values.remove(high_value)
         except ValueError:
             pass
 
 def main():
-    pass
+    file_name = os.path.join(
+        os.path.join(os.path.dirname(__file__), 'data'), 'day10_input.txt')
+
+    warehouse = Warehouse(61, 17)
+
+    warehouse.load_bots_with_instructions_from_file(file_name)
+    warehouse.run_bots()
+
+    print('Answer 1: {}'.format(warehouse.desired_bot_id))
+
+    print('Answer 2: {}'.format(
+        warehouse.output_bins['0'][0] * warehouse.output_bins['1'][0] *
+        warehouse.output_bins['2'][0]))
 
 if __name__ == '__main__':
     main()
