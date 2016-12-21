@@ -6,5 +6,6 @@
         "**/.hg": true,
         "**/.DS_Store": true,
         "**/__pycache__": true
-    }
+    },
+    "python.linting.enabled": false
 }
