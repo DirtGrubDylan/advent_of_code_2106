@@ -12,12 +12,15 @@ class Warehouse(object):
         super().__init__()
 
         self.bots = {}
+        self.number_1 = number_1
+        self.number_2 = number_2
         self.from_input_instructions = []
         self.desired_bot_id = None
 
     def load_bots_with_instructions_from_file(self, file_name):
         with open(file_name) as data_file:
             for line in data_file:
+                line = line.strip()
                 bot = BOT_SEARCH.search(line)
                 main_bot_id = bot.groups()[0]
 
@@ -25,7 +28,7 @@ class Warehouse(object):
                     if bot.groups()[0] not in self.bots:
                         self.bots[bot.groups()[0]] = Bot()
 
-                    bot = BOT_SEARCH.search(line[bot.span()[1]:])
+                    bot = BOT_SEARCH.search(line, bot.span()[1])
 
                 main_bot = self.bots[main_bot_id]
 
@@ -58,6 +61,8 @@ class Warehouse(object):
 
             if low_bot.is_full():
                 self.execute(low_destination[1])
+        else:
+            current_bot.output_low_value()
 
         if high_destination[0] == 'bot':
             high_bot = self.bots[high_destination[1]]
@@ -65,6 +70,8 @@ class Warehouse(object):
 
             if high_bot.is_full():
                 self.execute(high_destination[1])
+        else:
+            current_bot.output_high_value()
 
 
 class Bot(object):
@@ -91,14 +98,34 @@ class Bot(object):
         return (low_destination_and_id, high_destination_and_id)
 
     def give_low_value_to(self, other_bot):
-        low_value = min(self.values)
-        other_bot.values.append(low_value)
-        self.values.remove(low_value)
+        try:
+            low_value = min(self.values)
+            other_bot.values.append(low_value)
+            self.values.remove(low_value)
+        except ValueError:
+            pass
 
     def give_high_value_to(self, other_bot):
-        high_value = min(self.values)
-        other_bot.values.append(high_value)
-        self.values.remove(high_value)
+        try:
+            high_value = min(self.values)
+            other_bot.values.append(high_value)
+            self.values.remove(high_value)
+        except ValueError:
+            pass
+
+    def output_low_value(self):
+        try:
+            low_value = min(self.values)
+            self.values.remove(low_value)
+        except ValueError:
+            pass
+
+    def output_high_value(self):
+        try:
+            high_value = min(self.values)
+            self.values.remove(high_value)
+        except ValueError:
+            pass
 
 def main():
     pass
