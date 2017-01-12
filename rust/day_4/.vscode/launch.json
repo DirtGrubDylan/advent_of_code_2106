@@ -7,7 +7,7 @@
             "request": "launch",
             "target": "target/debug/day_4",
             "cwd": "${workspaceRoot}",
-            "arguments": "This that 10"
+            "arguments": "/home/dhicks/Documents/advent_of_code_2106/python/advents/data/day4_input.txt"
         }
     ]
 }
