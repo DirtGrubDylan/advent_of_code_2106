@@ -8,12 +8,26 @@ pub struct RoomKey {
 }
 
 impl RoomKey {
+    pub fn decrypted_name(&self) -> String {
+        self.encrypted_name
+            .chars()
+            .map(|character| {
+                match character {
+                    '-' => ' ',
+                    _ => (((((character as u32) + self.sector_id - 97) % 26) + 97) as u8) as char,
+                }
+            })
+            .collect::<String>()
+    }
+
+
     pub fn is_real(&self) -> bool {
         let mut ordered_char_counter: BTreeMap<char, u32> = BTreeMap::new();
 
         for character in self.encrypted_name.chars() {
-            if character != '-' {
-                *ordered_char_counter.entry(character).or_insert(0) += 1;
+            match character {
+                '-' => continue,
+                _ => *ordered_char_counter.entry(character).or_insert(0) += 1,
             }
         }
 
@@ -35,6 +49,18 @@ impl RoomKey {
 #[cfg(test)]
 mod test {
     use super::*;
+
+    #[test]
+    fn test_decrypted_name() {
+        let test_key: RoomKey = RoomKey {
+            encrypted_name: "qzmt-zixmtkozy-ivhz".to_string(),
+            sector_id: 343,
+            check_sum: "zimtb".to_string(),
+        };
+
+        assert_eq!(test_key.decrypted_name(), "very encrypted name".to_string());
+    }
+
 
     #[test]
     fn test_is_real() {
