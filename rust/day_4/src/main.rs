@@ -12,7 +12,7 @@ fn main() {
 
     println!("Room Sector ID Containing North Pole Objects: {}",
              data.iter()
-                 .find(|&roomkey| roomkey.decrypted_name().to_lowercase().contains("north"))
+                 .find(|roomkey| roomkey.decrypted_name().to_lowercase().contains("north"))
                  .unwrap()
                  .sector_id);
 }
