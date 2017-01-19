@@ -1,0 +1,15 @@
+[package]
+name = "day_7"
+version = "0.1.0"
+authors = ["Dylan Hicks <dman1366@gmail.com>"]
+
+[lib]
+name = "libday_7"
+path = "src/lib.rs"
+
+[[bin]]
+name = "day_7"
+path = "src/main.rs"
+
+[dependencies]
+regex = "0.2.1"
