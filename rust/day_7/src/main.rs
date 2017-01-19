@@ -10,4 +10,5 @@ fn main() {
     let data: Vec<IPv7> = libday_7::load_ipv7s_from_file(&arguments[1]).unwrap();
 
     println!("First answer: {}", libday_7::number_of_tls_supported(&data));
+    println!("Second answer: {}", libday_7::number_of_ssl_supported(&data));
 }

@@ -32,6 +32,17 @@ pub fn number_of_tls_supported(ipv7_addresses: &Vec<IPv7>) -> u32 {
 }
 
 
+pub fn number_of_ssl_supported(ipv7_addresses: &Vec<IPv7>) -> u32 {
+    ipv7_addresses.iter().fold(0, |accumulator, ipv7| {
+        if ipv7.supports_ssl() {
+            accumulator + 1
+        } else {
+            accumulator
+        }
+    })
+}
+
+
 #[cfg(test)]
 mod test {
     use super::*;
@@ -66,5 +77,20 @@ mod test {
                                         IPv7::new("zazbz[bzb]cdb".to_string())];
 
         assert_eq!(number_of_tls_supported(&test_data), 2);
+    }
+
+
+    #[test]
+    fn test_number_of_ssl_supported() {
+        let test_data: Vec<IPv7> = vec![IPv7::new("abba[mnop]qrst".to_string()),
+                                        IPv7::new("abcd[bddb]xyyx".to_string()),
+                                        IPv7::new("aaaa[qwer]tyui".to_string()),
+                                        IPv7::new("ioxxoj[asdfgh]zxcvbn".to_string()),
+                                        IPv7::new("aba[bab]xyz".to_string()),
+                                        IPv7::new("xyx[xyx]xyx".to_string()),
+                                        IPv7::new("aaa[kek]eke".to_string()),
+                                        IPv7::new("zazbz[bzb]cdb".to_string())];
+
+        assert_eq!(number_of_ssl_supported(&test_data), 3);
     }
 }

@@ -59,6 +59,21 @@ impl IPv7 {
 
         false
     }
+
+
+    pub fn supports_ssl(&self) -> bool {
+        for super_net in &self.super_nets {
+            for super_net_aba in abas_in(&super_net) {
+                for hyper_net in &self.hyper_nets {
+                    if hyper_net.contains(&bab_from(&super_net_aba)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        false
+    }
 }
 
 pub fn has_abba(string: &str) -> bool {
@@ -76,6 +91,32 @@ pub fn has_abba(string: &str) -> bool {
     }
 
     false
+}
+
+
+pub fn abas_in(string: &str) -> Vec<String> {
+    let mut abas: Vec<String> = Vec::new();
+    let chars: Vec<char> = string.chars().collect();
+
+    if chars.len() < 3 {
+        return abas;
+    }
+
+    for index in 0..(chars.len() - 2) {
+        if (chars[index] == chars[index + 2]) && (chars[index] != chars[index + 1]) {
+            abas.push(
+                vec![chars[index], chars[index + 1], chars[index + 2]].into_iter().collect());
+        }
+    }
+
+    abas
+}
+
+
+pub fn bab_from(aba: &str) -> String {
+    let characters: Vec<char> = aba.chars().collect();
+
+    vec![characters[1], characters[0], characters[1]].into_iter().collect()
 }
 
 #[cfg(test)]
@@ -123,6 +164,43 @@ mod test {
         assert!(!test_data[5].supports_tls());
         assert!(!test_data[6].supports_tls());
         assert!(!test_data[7].supports_tls());
+    }
 
+
+    #[test]
+    fn test_bab_from() {
+        assert_eq!(bab_from("aaa"), "aaa");
+        assert_eq!(bab_from("zbz"), "bzb");
+    }
+
+
+    #[test]
+    fn test_abas_in() {
+        assert!(abas_in("abba").is_empty());
+        assert!(abas_in("aaaa").is_empty());
+        assert_eq!(abas_in("xyx"), vec!["xyx"]);
+        assert_eq!(abas_in("zazbz"), vec!["zaz", "zbz"]);
+    }
+
+
+    #[test]
+    fn test_supports_ssl() {
+        let test_data: Vec<IPv7> = vec![IPv7::new("abba[mnop]qrst".to_string()),
+                                        IPv7::new("abcd[bddb]xyyx".to_string()),
+                                        IPv7::new("aaaa[qwer]tyui".to_string()),
+                                        IPv7::new("ioxxoj[asdfgh]zxcvbn".to_string()),
+                                        IPv7::new("aba[bab]xyz".to_string()),
+                                        IPv7::new("xyx[xyx]xyx".to_string()),
+                                        IPv7::new("aaa[kek]eke".to_string()),
+                                        IPv7::new("zazbz[bzb]cdb".to_string())];
+
+        assert!(!test_data[0].supports_ssl());
+        assert!(!test_data[1].supports_ssl());
+        assert!(!test_data[2].supports_ssl());
+        assert!(!test_data[3].supports_ssl());
+        assert!(test_data[4].supports_ssl());
+        assert!(!test_data[5].supports_ssl());
+        assert!(test_data[6].supports_ssl());
+        assert!(test_data[7].supports_ssl());
     }
 }
