@@ -3,4 +3,12 @@ name = "day_8"
 version = "0.1.0"
 authors = ["dhicks"]
 
+[lib]
+name = "libday_8"
+path = "src/lib.rs"
+
+[[bin]]
+name = "day_8"
+path = "src/main.rs"
+
 [dependencies]
