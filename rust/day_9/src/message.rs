@@ -17,7 +17,9 @@ impl Message {
     }
     
     pub fn decompress_v2(&self) -> String {
-        unimplemented!();
+        let marker_finder: Regex = Regex::new(r"\((\d+)x(\d+)\)").unwrap();
+
+        decompress_string_v2(&self.data, marker_finder)
     }
 }
 
@@ -46,4 +48,8 @@ fn decompress_string_v1(message: &str, marker_regex: Regex) -> String {
     }
 
     decompressed_message
+}
+
+fn decompress_string_v2(message: &str, marker_regex: Regex) -> String {
+    message.to_string()
 }

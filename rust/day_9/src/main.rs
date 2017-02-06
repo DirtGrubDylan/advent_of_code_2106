@@ -6,4 +6,5 @@ fn main() {
         .unwrap();
 
     println!("{}", new_m[0].decompress_v1().len());
+    println!("{}", new_m[0].decompress_v2().len());
 }
