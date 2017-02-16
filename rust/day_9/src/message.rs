@@ -62,7 +62,7 @@ fn decompress_string_v2(message: &str, marker_regex: &Regex) -> u64 {
 
         str_index += matched.end() + number_of_chars;
 
-        decompressed_length =
+        decompressed_length +=
             number_of_repeats *
             decompress_string_v2(&message[(str_index - number_of_chars)..str_index], marker_regex);
     }
