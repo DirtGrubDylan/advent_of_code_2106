@@ -62,14 +62,9 @@ fn decompress_string_v2(message: &str, marker_regex: &Regex) -> u64 {
 
         str_index += matched.end() + number_of_chars;
 
-        let number_to_repeat: u64 =
-            decompress_string_v2(&message[(str_index - number_of_chars)..str_index],
-                                 marker_regex);
-
-        match number_of_repeats.checked_mul(number_to_repeat) {
-            Some(num) => decompressed_length += num,
-            None => println!("{}, {}", number_of_repeats, number_to_repeat),
-        };
+        decompressed_length =
+            number_of_repeats *
+            decompress_string_v2(&message[(str_index - number_of_chars)..str_index], marker_regex);
     }
 
     if str_index < message.len() {
