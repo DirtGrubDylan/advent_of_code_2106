@@ -25,7 +25,8 @@ mod test {
 
     #[test]
     fn test_load_messages_from_file() {
-        let test_path = r"C:\Users\dylan\Documents\advent_of_code_2106\python\tests\test_data\test_day9_data.txt";
+        let test_path = "/home/dhicks/Documents/advent_of_code_2106/python/tests/test_data/test_day9_data.\
+                         txt";
 
         let test_data = vec![Message::new("ADVENT"),
                              Message::new("A(1x5)BC"),
