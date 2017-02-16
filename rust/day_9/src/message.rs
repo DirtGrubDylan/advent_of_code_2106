@@ -98,8 +98,7 @@ mod test {
 
     #[test]
     fn test_decompress_v2() {
-        let test_data =
-            vec![Message::new("(3X3)XYZ").decompress_v2(),
+        let test_data = vec![Message::new("(3X3)XYZ").decompress_v2(),
                  Message::new("X(8x2)(3x3)ABCY").decompress_v2(),
                  Message::new("(27x12)(20x12)(13x14)(7x10)(1x12)A").decompress_v2(),
                  Message::new("(25x3)(3x3)ABC(2x3)XY(5x2)PQRSTX(18x9)(3x2)TWO(5x7)SEVEN")
