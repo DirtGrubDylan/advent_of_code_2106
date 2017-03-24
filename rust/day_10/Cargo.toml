@@ -4,3 +4,4 @@ version = "0.1.0"
 authors = ["Dylan Hicks <dhicks@ntia.doc.gov>"]
 
 [dependencies]
+regex = "0.2"
