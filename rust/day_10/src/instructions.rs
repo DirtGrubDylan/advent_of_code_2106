@@ -1,6 +1,6 @@
 use regex::Regex;
 
-#[derive(Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq)]
 pub enum Instruction {
     BotInstruction(i32, String, i32, String, i32),
     ValueInstruction(i32, i32),
