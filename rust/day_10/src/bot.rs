@@ -35,24 +35,30 @@ impl Bot {
         self.low_value.is_some() && self.high_value.is_some()
     }
 
-    fn give_high_value_to_bot(&mut self, other_bot: &mut Bot) {
-        other_bot.add_value(self.high_value.unwrap());
-        self.high_value = None;
+    pub fn contains(&self, low_val: i32, high_val: i32) -> bool {
+        if let Some(low_value) = self.low_value {
+            if let Some(high_value) = self.high_value {
+                return (low_value == low_val) && (high_value == high_val);
+            }
+        }
+
+        false
     }
 
-    fn give_low_value_to_bot(&mut self, other_bot: &mut Bot) {
-        other_bot.add_value(self.low_value.unwrap());
+    pub fn get_low_val(&mut self) -> Option<i32> {
+        let low_val = self.low_value;
+
         self.low_value = None;
+
+        low_val
     }
 
-    fn give_high_value_to_output(&mut self, output: &mut Vec<i32>) {
-        output.push(self.high_value.unwrap());
+    pub fn get_high_val(&mut self) -> Option<i32> {
+        let high_val = self.high_value;
+
         self.high_value = None;
-    }
 
-    fn give_low_value_to_output(&mut self, output: &mut Vec<i32>) {
-        output.push(self.low_value.unwrap());
-        self.low_value = None;
+        high_val
     }
 
     pub fn new(id: i32) -> Bot {

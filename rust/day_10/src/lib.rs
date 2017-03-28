@@ -11,7 +11,6 @@ use std::io::BufReader;
 use std::io::prelude::*;
 use std::collections::VecDeque;
 
-use bot_manager::BotManager;
 use instructions::Instruction;
 
 pub fn instructions_from<P: AsRef<Path>>(path: P) -> io::Result<VecDeque<Instruction>> {
@@ -24,22 +23,6 @@ pub fn instructions_from<P: AsRef<Path>>(path: P) -> io::Result<VecDeque<Instruc
 
     Ok(data)
 }
-
-// pub fn interpret_instructions(instructs: &VecDeque<Instruction>) {
-//     let mut bots: HashMap<i32, Bot> = HashMap::new();
-//     let mut outputs: HashMap<i32, Vec<i32>> = HashMap::new();
-
-//     for instruction in instructs {
-//         match *instruction {
-//             Instruction::BotInstruction(ref id, ..) => {}
-//             Instruction::ValueInstruction(ref value, ref id) => {
-//                 let bot: &mut Bot = bots.entry(*id).or_insert(Bot::new(*id));
-
-//                 bot.add_value(*value);
-//             }
-//         }
-//     }
-// }
 
 #[cfg(test)]
 mod test {
