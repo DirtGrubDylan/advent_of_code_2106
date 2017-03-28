@@ -13,11 +13,11 @@ pub fn instruction_from(data_line: &str) -> Result<Instruction, String> {
         return bot_instruction_from(data_line);
     }
 
-    Err("Not an Instruction.".to_string())
+    Err(format!("Not an Instruction From: {:?}.", data_line).to_string())
 }
 
 fn bot_instruction_from(data_line: &str) -> Result<Instruction, String> {
-    let bot_instruction_regex: Regex = Regex::new(r".{4}(\d).{14}(\w+)\s(\d).{13}(\w+)\s(\d)")
+    let bot_instruction_regex: Regex = Regex::new(r".{4}(\d+).{14}(\w+)\s(\d+).{13}(\w+)\s(\d+)")
         .unwrap();
 
     match bot_instruction_regex.captures(data_line) {
@@ -34,12 +34,12 @@ fn bot_instruction_from(data_line: &str) -> Result<Instruction, String> {
                                                .parse::<i32>()
                                                .expect("Not an Instruction.")))
         }
-        None => Err("Not an Instruction.".to_string()),
+        None => Err(format!("Not a Bot Instruction From: {:?}.", data_line).to_string()),
     }
 }
 
 fn value_instruction_from(data_line: &str) -> Result<Instruction, String> {
-    let value_instruction_regex: Regex = Regex::new(r".{6}(\d).*(\d)").unwrap();
+    let value_instruction_regex: Regex = Regex::new(r".{6}(\d+).*\s(\d+)").unwrap();
 
     match value_instruction_regex.captures(data_line) {
         Some(captures) => {
@@ -50,7 +50,7 @@ fn value_instruction_from(data_line: &str) -> Result<Instruction, String> {
                                                  .parse::<i32>()
                                                  .expect("Not an Instruction.")))
         }
-        None => Err("Not an Instruction.".to_string()),
+        None => Err(format!("Not a Value Instruction From: {:?}.", data_line).to_string()),
     }
 }
 

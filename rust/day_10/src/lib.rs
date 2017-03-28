@@ -11,6 +11,7 @@ use std::io::BufReader;
 use std::io::prelude::*;
 use std::collections::VecDeque;
 
+pub use bot_manager::BotManager;
 use instructions::Instruction;
 
 pub fn instructions_from<P: AsRef<Path>>(path: P) -> io::Result<VecDeque<Instruction>> {

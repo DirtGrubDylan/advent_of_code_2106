@@ -6,16 +6,19 @@ use instructions::Instruction;
 
 #[derive(Debug)]
 pub struct BotManager {
-    output_bins: HashMap<i32, Vec<i32>>,
-    bots: HashMap<i32, Bot>,
-    interesting_bot_id: i32,
-    interesting_low_value: i32,
-    interesting_high_value: i32,
+    pub output_bins: HashMap<i32, Vec<i32>>,
+    pub bots: HashMap<i32, Bot>,
+    pub interesting_bot_id: i32,
+    pub interesting_low_value: i32,
+    pub interesting_high_value: i32,
 }
 
 impl BotManager {
     fn execute(&mut self, bot_id: i32) {
-        if self.bots.get(&bot_id).unwrap().contains(self.interesting_low_value, self.interesting_high_value) {
+        if self.bots
+            .get(&bot_id)
+            .unwrap()
+            .contains(self.interesting_low_value, self.interesting_high_value) {
             self.interesting_bot_id = bot_id;
         }
 
